@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "gist.ai",
+  "name": "Gist Ai",
   "version": "1.0",
   "description": "A Chrome extension called gist.ai",
   "action": {
@@ -8,19 +8,22 @@
     "default_popup": "index.html",
     "default_icon": "icon.png"
   },
-  "permissions": [
-    "activeTab"
-  ],
-  "minimum_chrome_version": "131",
   "side_panel": {
     "default_path": "sidepanel.html"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
-  }
-}
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "webNavigation" ],
+    "host_permissions": ["https://*/*"] ,
+    "background": {
+      "service_worker": "background.js"
+    },
+     "icons": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+   }
+   
