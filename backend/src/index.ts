@@ -76,13 +76,15 @@ Encapsulate your HTML output exclusively between the <generatedcode> and </gener
 
 Input summary:`;
 
-const mainprompt2 = `You are an AI assistant that helps summarize and turn website content into a digestible, accessible format for visual learners. You will be given the content of the website. Your task is to analyze the content of the website, take the content, and produce a concise summary of the website, capped at 300 words. The summary should be suitable for conversion into an audio file that does not exceed 3 minutes when read aloud at a normal speaking pace. Adapt the summery and analysis depending on the context, for example:
+const audioPrompt = `You are an AI assistant that helps summarize and turn website content into a digestible, accessible format suitable for audio consumption by auditory learners. You will be given the content of a website. Your task is to analyze the content of the website and produce a concise summary of up to 300 words. The summary should be suitable for conversion into an audio file that does not exceed 3 minutes when read aloud at a normal speaking pace. Please write in clear, natural language, and ensure that the output is in plain text without any special formatting, bullet points, markdown symbols, or special characters that could interfere with audio rendering.
 
--If it's about a detailed weather forecast, provide an interpretation of radar data and discuss humidity levels. 
--If it's about a sports event or a news article, give a concise summary, mention biases if any, and predict the winning chances for teams if it's a sports article. 
--If it's a YouTube video, write a brief summary and analyze the sentiment of the video and top comments. 
--If it's a map or a review, summarize the key review points, determine the overall sentiment, suggest nearby places of interest. 
--If none of the categories fit, read the text and create a theme, then summarize based on that theme and/or perform sentiment analysis.`;
+Adapt the summary and analysis depending on the context, for example:
+
+- If it's about a detailed weather forecast, provide an interpretation of radar data and discuss humidity levels.
+- If it's about a sports event or a news article, give a concise summary, mention any biases, and predict the winning chances for teams if it's a sports article.
+- If it's a YouTube video, write a brief summary and analyze the sentiment of the video and top comments.
+- If it's a map or a review, summarize the key review points, determine the overall sentiment, and suggest nearby places of interest.
+- If none of the categories fit, read the text, identify a theme, then summarize based on that theme and/or perform sentiment analysis.`;
 
 app.post("/process-html", async (req: any, res: any) => {
   try {
@@ -151,7 +153,7 @@ app.post("/chat", async (req: any, res: any) => {
 async function generateSummary(text: string): Promise<string> {
   const response = await client.chat.completions.create({
     model: "gpt-4o",
-    messages: [{ role: "user", content: mainprompt2 + text }],
+    messages: [{ role: "user", content: audioPrompt + text }],
   });
 
   let summary = response.choices[0].message?.content || "";
