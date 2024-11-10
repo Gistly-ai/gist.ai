@@ -6,11 +6,12 @@
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Comic+Neue:wght@700&display=swap"
       rel="stylesheet"
     />
-    <script src="index.js"></script>
   </head>
   <body>
-    <button class="play-btn">
+    <!-- Play Button -->
+    <button class="play-btn disabled" id="playButton" disabled>
       <svg
+        id="playIcon"
         width="24"
         height="24"
         viewBox="0 0 24 24"
@@ -24,6 +25,7 @@
       </svg>
     </button>
 
+    <!-- Content Container -->
     <div id="content">
       <div class="loading-container">
         <div class="loading-text">
@@ -49,5 +51,11 @@
         </div>
       </div>
     </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="audioPlayer" style="display: none"></audio>
+
+    <!-- Include the JavaScript file -->
+    <script src="index.js"></script>
   </body>
 </html>

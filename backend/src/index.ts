@@ -29,7 +29,10 @@ const client = new OpenAI({
 
 import path from "path";
 
-const keyFilename = path.resolve(__dirname, "/Users/abhinavprakash/Desktop/gist.ai/backend/secret/sample1-a0cb0-096e65d87e5e.json");
+const keyFilename = path.resolve(
+  __dirname,
+  "../secret/sample1-a0cb0-096e65d87e5e.json"
+);
 
 const ttsClient = new textToSpeech.TextToSpeechClient({
   keyFilename: keyFilename,
@@ -70,15 +73,16 @@ The summary should be a concise and detailed, include important and detailed inf
 Input website content:`;
 
 
-const mainprompt2=`You are an AI assistant that helps summarize and turn website content into a digestible, accessible format for visual learners. You will be given the content of the website. Your task is to analyze the content of the website, take the content, and produce a concise summary of the website, capped at 300 words. The summary should be suitable for conversion into an audio file that does not exceed 3 minutes when read aloud at a normal speaking pace. Adapt the summery and analysis depending on the context, for example:
+const audioPrompt=`You are an AI assistant that helps summarize and turn website content into a digestible, accessible format for visual learners. You will be given the content of the website. Your task is to analyze the content of the website, take the content, and produce a concise summary of the website, capped at 300 words. The summary should be suitable for conversion into an audio file that does not exceed 3 minutes when read aloud at a normal speaking pace. Adapt the summery and analysis depending on the context, for example:
 
--If it's about a detailed weather forecast, provide an interpretation of radar data and discuss humidity levels. 
--If it's about a sports event or a news article, give a concise summary, mention biases if any, and predict the winning chances for teams if it's a sports article. 
--If it's a YouTube video, write a brief summary and analyze the sentiment of the video and top comments. 
--If it's a map or a review, summarize the key review points, determine the overall sentiment, suggest nearby places of interest. 
--If none of the categories fit, read the text and create a theme, then summarize based on that theme and/or perform sentiment analysis.`
+- If it's about a detailed weather forecast, provide an interpretation of radar data and discuss humidity levels.
+- If it's about a sports event or a news article, give a concise summary, mention any biases, and predict the winning chances for teams if it's a sports article.
+- If it's a YouTube video, write a brief summary and analyze the sentiment of the video and top comments.
+- If it's a map or a review, summarize the key review points, determine the overall sentiment, and suggest nearby places of interest.
+- If none of the categories fit, read the text, identify a theme, then summarize based on that theme and/or perform sentiment analysis.`;
 
 var prompt2:any ;
+
 function buildPrompt2(colorB:any,dys:any,highC:any)
 {
   prompt2 = `You are an AI assistant that turns summarys to HTML pages. You will be given a summary of the website and sugested components and icons. Your task is to use the summary and sugested visual components to produce a well-structured HTML page to present a concise digestable summary of the website. The HTML page you produce, can be interactive and adapt depending on the context of the website. Make it for visual learners. Ensure the HTML output is visually appealing and digestible. Style it acordingly. Do not include any placeholder images.
@@ -169,7 +173,7 @@ app.post("/chat", async (req: any, res: any) => {
 async function generateSummary(text: string): Promise<string> {
   const response = await client.chat.completions.create({
     model: "gpt-4o",
-    messages: [{ role: "user", content: mainprompt2 + text }],
+    messages: [{ role: "user", content: audioPrompt + text }],
   });
 
   let summary = response.choices[0].message?.content || "";
@@ -182,7 +186,6 @@ async function generateSummary(text: string): Promise<string> {
 
   return summary.trim();
 }
-
 
 function splitTextIntoChunks(text: string, maxChunkBytes: number): string[] {
   const encoder = new TextEncoder();
@@ -213,7 +216,6 @@ function splitTextIntoChunks(text: string, maxChunkBytes: number): string[] {
   return chunks;
 }
 
-
 async function generateAudioFromText(text: string): Promise<Buffer> {
   const maxChunkLength = 5000; // Maximum allowed bytes per chunk
   const textChunks = splitTextIntoChunks(text, maxChunkLength);
@@ -241,12 +243,13 @@ async function generateAudioFromText(text: string): Promise<Buffer> {
   return combinedAudio;
 }
 
-
 app.post("/generate-mp3", async (req: any, res: any) => {
   const text = req.body.text || req.body;
 
   if (!text) {
-    return res.status(400).json({ error: "Text is required for MP3 generation" });
+    return res
+      .status(400)
+      .json({ error: "Text is required for MP3 generation" });
   }
 
   try {
@@ -264,8 +267,6 @@ app.post("/generate-mp3", async (req: any, res: any) => {
     res.status(500).json({ error: error.message || "An error occurred" });
   }
 });
-
-
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
