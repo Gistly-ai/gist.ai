@@ -257,7 +257,7 @@ body {
   }
   70% {
     opacity: 1;
-    transform: translateY(80px);
+    transform: translateY(100px);
   }
   71%,
   100% {
@@ -277,7 +277,7 @@ body {
   }
   80% {
     opacity: 1;
-    transform: translateY(80px);
+    transform: translateY(100px);
   }
   81%,
   100% {
@@ -297,7 +297,7 @@ body {
   }
   90% {
     opacity: 1;
-    transform: translateY(80px);
+    transform: translateY(100px);
   }
   91%,
   100% {
