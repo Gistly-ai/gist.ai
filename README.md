@@ -1,1 +1,1 @@
-# Gistly.AI
+# Gist.AI
