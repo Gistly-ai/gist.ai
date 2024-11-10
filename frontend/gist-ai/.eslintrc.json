@@ -1,0 +1,10 @@
+{
+    "globals": {
+      "chrome": "readonly"
+    },
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  }
+  

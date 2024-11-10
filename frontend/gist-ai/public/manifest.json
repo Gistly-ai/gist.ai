@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Chrome Reading List",
+  "version": "1.0",
+  "description": "A Chrome extension to keep a reading list.",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "icon.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}
