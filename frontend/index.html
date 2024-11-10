@@ -1,11 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Popup</title>
+  <link rel="stylesheet" type="text/css" href="index.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Comic+Neue:wght@700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Ensure popup has enough width */
+    body {
+      min-width: 250px;
+      max-width: 400px;
+      min-height: 300px;
+      padding: 20px;
+      margin: 0;
+      box-sizing: border-box;
+      background: linear-gradient(to right, #ffffff, #f0f0f0);
+      font-family: 'Quicksand', sans-serif;
+    }
+  </style>
 </head>
 <body>
-    Popup
+  <h2 class="panel-title">Accessibility Settings</h2>
+
+  <div class="toggle-container">
+    <label class="toggle-label">Color Blind Mode</label>
+    <label class="switch">
+      <input type="checkbox" id="colorBlindToggle">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="toggle-container">
+    <label class="toggle-label">Dyslexic Font</label>
+    <label class="switch">
+      <input type="checkbox" id="dyslexicFontToggle">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="toggle-container">
+    <label class="toggle-label">High Contrast</label>
+    <label class="switch">
+      <input type="checkbox" id="highContrastToggle">
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <!-- New Toggle Options (Disabled) -->
+  <div class="toggle-container">
+    <label class="toggle-label">Remember Context</label>
+    <label class="switch">
+      <input type="checkbox" id="rememberContextToggle" disabled>
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="toggle-container">
+    <label class="toggle-label">Persist Customizations</label>
+    <label class="switch">
+      <input type="checkbox" id="persistCustomizationsToggle" disabled>
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <script src="index.js"></script>
 </body>
 </html>
