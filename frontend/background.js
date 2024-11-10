@@ -6,31 +6,19 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 // Listen for messages from the content script
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === "fetchData") {
-    // Replace the URL with your desired API endpoint
-    fetch('https://api.example.com/data')
-      .then(response => response.json())
-      .then(data => {
-        console.log("API Data: ", data);
-        sendResponse({ data: data });
-      })
-      .catch(error => {
-        console.error("Error fetching data: ", error);
-        sendResponse({ error: "Failed to fetch data" });
-      });
+let windowId;
 
-    // Required to return true when sending a response asynchronously
-    return true;
-  }
+chrome.tabs.onActivated.addListener(function (activeInfo) {
+  windowId = activeInfo.windowId;
+});
 
-  if (message.action === "openSidePanel") {
-    // Open the side panel when the button is clicked
-    chrome.sidePanel.setOptions({
-      path: "sidepanel.html", // Make sure you have a sidepanel.html file ready
-      enabled: true,
-    }).catch((error) => console.error("Failed to open side panel: ", error));
-  }
+// to receive messages from popup script
+chrome.runtime.onMessage.addListener((message, sender) => {
+  (async () => {
+    if (message.action === 'open_side_panel') {
+      chrome.sidePanel.open({ windowId: windowId });
+    }
+  })();
 });
 
 chrome.webNavigation.onCompleted.addListener(
@@ -95,3 +83,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "openSidePanel") {
+    console.log('Opening side panel...');
+    chrome.sidePanel.open({ windowId: sender.tab?.windowId });
+    // Open the side panel asynchronously
+    chrome.sidePanel.setOptions({
+      path: "sidepanel/index.html", // Make sure you have a sidepanel.html file ready
+      enabled: true,
+    })
+    .then(() => {
+      console.log('Side panel opened successfully.');
+      sendResponse({ status: "success" });
+    })
+    .catch((error) => {
+      console.error("Failed to open side panel: ", error);
+      sendResponse({ status: "error", error: error.message });
+    });
+
+    // Return true to indicate response will be sent asynchronously
+    return true;
+  }
+});
+
+chrome.runtime.sendMessage({ action: "openFloatingButton" });
