@@ -36,7 +36,7 @@ function parseHtmlResponse(html: string): string {
     .trim(); // Remove leading/trailing whitespace
 }
 
-const mainprompt = `You are an AI assistant that helps summarize and turn website content into digestible accessible format for visual lerners. You will be given the content of the website. Your task is to analyze the content of the website, take the content, and produce a well-structured HTML page to present a concise digestable summary of the website, capped at 300 words. The HTML page you produce, can be interactive and adapt depending on the context of the website. Make it for visual learners.
+const prompt1 = `You are an AI assistant that helps summarize and turn website content into digestible accessible format for visual lerners. You will be given the content of the website. Your task is to analyze the content of the website, take the content, and produce a consise outline that wil then be used to make a page to present a concise digestable summary of the website.
 
 Adapt the summery and analysis depending on the context, for example:
 
@@ -46,35 +46,51 @@ Adapt the summery and analysis depending on the context, for example:
 -If it's a map or a review, summarize the key review points, determine the overall sentiment, suggest nearby places of interest. 
 -If none of the categories fit, read the text and create a theme, then summarize based on that theme and/or perform sentiment analysis.
 
-Ensure the HTML output is visually appealing and digestible. Encapsulate your HTML output exclusively between the <generatedcode> and </generatedcode> tags.
-
-Only output a well-structured HTML page to represent the digestible content for visual learners.
+The summary should be a concise and detailed, include important and detailed information. Keep the summary and analysis consise, 800 words max.
 
 Input website content:`;
 
+const prompt2 = `You are an AI assistant that turns summarys to HTML pages. You will be given a summary of the website and sugested components and icons. Your task is to use the summary and sugested visual components to produce a well-structured HTML page to present a concise digestable summary of the website. The HTML page you produce, can be interactive and adapt depending on the context of the website. Make it for visual learners. Ensure the HTML output is visually appealing and digestible. Style it acordingly. Do not include any placeholder images.
+
+Organize the content in a way that is easy to read and understand (for example, cards in a grid). You can use emojis for icons.
+
+Make sure to include all usful information from the summary (dont just make it a high level summary, actualy include detailes and usful information).
+
+Encapsulate your HTML output exclusively between the <generatedcode> and </generatedcode> tags.
+
+Input summary:`;
+
 app.post("/process-html", async (req: any, res: any) => {
   try {
-    const prompt = req.body;
-    // Check if the prompt is provided
-    if (!prompt) {
-      return res.status(400).json({ error: "Prompt is required" });
+    const websiteContent = req.body;
+    if (!websiteContent) {
+      return res.status(400).json({ error: "Content is required" });
     }
 
-    // Use OpenAI to create a chat completion (response from ChatGPT)
-    const response = await client.chat.completions.create({
-      model: "gpt-4o",
-      messages: [{ role: "user", content: mainprompt + prompt }],
+    // First API call - Get the summary
+    const summaryResponse = await client.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt1 + websiteContent }],
     });
 
-    // Extract the reply and send it as a response
-    const reply = response.choices[0].message?.content;
+    const summary = summaryResponse.choices[0].message?.content;
+    if (!summary) {
+      throw new Error("Failed to generate summary");
+    }
+
+    // Second API call - Convert summary to HTML
+    const htmlResponse = await client.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "user", content: prompt2 + summary }],
+    });
+
+    const reply = htmlResponse.choices[0].message?.content;
     const parsedHTML = parseHtmlResponse(reply!);
 
-    // Set the Content-Type to text/html and send the HTML response
     res.setHeader("Content-Type", "text/html");
     return res.send(parsedHTML);
   } catch (error: any) {
-    console.error("Error processing prompt:", error);
+    console.error("Error processing content:", error);
     res.status(500).json({ error: error.message || "An error occurred" });
   }
 });
