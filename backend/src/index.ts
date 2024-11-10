@@ -29,7 +29,7 @@ import path from "path";
 
 const keyFilename = path.resolve(
   __dirname,
-  "/Users/abhinavprakash/Desktop/gist.ai/backend/secret/sample1-a0cb0-096e65d87e5e.json"
+  "../secret/sample1-a0cb0-096e65d87e5e.json"
 );
 
 const ttsClient = new textToSpeech.TextToSpeechClient({
