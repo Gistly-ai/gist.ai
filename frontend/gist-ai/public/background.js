@@ -1,31 +1,51 @@
-// background.js
-// @ts-ignore
 chrome.runtime.onInstalled.addListener(() => {
-    console.log("Chrome Reading List Extension Installed");
-  });
-// @ts-ignore
-chrome.webNavigation.onCompleted.addListener((details) => {
-  // Check if the page is fully loaded and matches the required URL pattern
-  if (details.frameId === 0) { // frameId 0 means it's the main frame (not an iframe)
-    console.log("Page loaded:", details.url);
+  console.log("Chrome Reading List Extension Installed");
+});
 
-    // Execute a script on the loaded page
-    console.log("Executing script on page load");
+chrome.webNavigation.onCompleted.addListener(
+  (details) => {
+    if (details.frameId === 0) {
+      console.log("Page loaded:", details.url);
+      console.log("Executing script on page load");
 
-    // @ts-ignore
-    chrome.scripting.executeScript({
-      target: { tabId: details.tabId },
-      func: runOnPageLoad
-    });
+      // Inject content script to capture page content
+      chrome.scripting.executeScript({
+        target: { tabId: details.tabId },
+        func: capturePageContent,
+      });
+    }
+  },
+  { url: [{ urlMatches: "https://*/*" }] }
+);
+
+function capturePageContent() {
+  // Get the HTML content of the page
+  const content = document.documentElement.outerHTML;
+
+  console.log("Content captured");
+  // Send the content to the background script
+  chrome.runtime.sendMessage({ content });
+}
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.content) {
+    fetch("http://localhost:3000/fetch-content", {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/html",
+      },
+      body: message.content, 
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Response from server:", data);
+        sendResponse({ status: "success", data });
+      })
+      .catch((error) => {
+        console.error("Error sending content to server:", error);
+        sendResponse({ status: "error", error });
+      });
+
+    return true;
   }
-}, { url: [{ urlMatches: 'https://*/*' }] }); // M
-  
-  // Function to run on page load
-  function runOnPageLoad() {
-    // Add any code here that you want to run on the page load
-
-  
-    // Example action: Modify the DOM or log something
-    document.body.style.backgroundColor = "lightblue"; // Changes the background color
-  }
-  
+});
