@@ -1,1 +1,1 @@
-# Gist.AI
+# gist.ai
