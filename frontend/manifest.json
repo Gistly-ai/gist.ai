@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Gist Ai",
+  "name": "gist.ai",
   "version": "1.0",
-  "description": "A Chrome extension to keep a reading list.",
+  "description": "Simplifies web content in real-time, offering accessible, personalized summaries through an intuitive interface.",
   "action": {
     "default_popup": "index.html"
   },
@@ -13,12 +13,11 @@
     "webNavigation",
     "sidePanel"
   ],
-  "host_permissions": ["https://*/*"] ,
+  "host_permissions": ["https://*/*"],
   "background": {
     "service_worker": "background.js"
   },
   "side_panel": {
     "default_path": "sidepanel/index.html"
   }
- }
- 
+}
