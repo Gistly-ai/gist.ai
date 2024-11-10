@@ -7,4 +7,26 @@ document.addEventListener('DOMContentLoaded', () => {
             contentDiv.innerHTML = message.data;
         }
     });
+    const playButton = document.querySelector(".profile-btn");
+    if (playButton) {
+      playButton.addEventListener("click", () => {
+        // Send a message to the background script to open the popup
+        chrome.action.openPopup();
+      });
+    } else {
+      console.error("profile-btn element not found");
+    }
+
+
+
+    
 });
+
+document.addEventListener("beforeunload", (event) => {
+
+  chrome.runtime.sendMessage({ action: "openFloatingButton" });
+});
+
+
+
+

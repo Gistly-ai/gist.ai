@@ -1,11 +1,9 @@
+import textToSpeech from "@google-cloud/text-to-speech";
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import OpenAI from "openai";
 dotenv.config();
-import fs from "fs";
-import util from "util";
-import textToSpeech from "@google-cloud/text-to-speech";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -51,13 +49,17 @@ function parseHtmlResponse(html: string): string {
 
 const prompt1 = `You are an AI assistant that helps summarize and turn website content into digestible accessible format for visual lerners. You will be given the content of the website. Your task is to analyze the content of the website, take the content, and produce a consise outline that wil then be used to make a page to present a concise digestable summary of the website.
 
-Adapt the summery and analysis depending on the context, for example:
+1. Analyze the website content
+2. Create a concise summary
+3. Produce a well-structured HTML page that presents this summary in a visually appealing way
 
--If it's about a detailed weather forecast, provide an interpretation of radar data and discuss humidity levels. 
--If it's about a sports event or a news article, give a concise summary, mention biases if any, and predict the winning chances for teams if it's a sports article. 
--If it's a YouTube video, write a brief summary and analyze the sentiment of the video and top comments. 
--If it's a map or a review, summarize the key review points, determine the overall sentiment, suggest nearby places of interest. 
--If none of the categories fit, read the text and create a theme, then summarize based on that theme and/or perform sentiment analysis.
+The HTML output should:
+- Use a clean, modern design with cards, grids, and sections
+- Include relevant emojis as icons where appropriate
+- Be interactive when beneficial to understanding
+- Be organized for easy reading and visual learning
+- Use a consistent style with proper spacing and typography
+- Not include placeholder images
 
 The summary should be a concise and detailed, include important and detailed information. Keep the summary and analysis consise, 800 words max.
 

@@ -40,7 +40,10 @@ button.addEventListener('click', () => {
   });
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log("here");
     if (message.action === "openFloatingButton") {
-        button.style.display ='block';
+      button.style.display = 'block';
     }
-});
+
+  });
+
