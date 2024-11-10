@@ -6,11 +6,12 @@
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Comic+Neue:wght@700&display=swap"
       rel="stylesheet"
     />
-    <script src="index.js"></script>
   </head>
   <body>
-    <button class="play-btn">
+    <!-- Play Button -->
+    <button class="play-btn" id="playButton">
       <svg
+        id="playIcon"
         width="24"
         height="24"
         viewBox="0 0 24 24"
@@ -24,30 +25,37 @@
       </svg>
     </button>
 
+    <!-- Content Container -->
     <div id="content">
       <div class="loading-container">
         <div class="loading-text">
           Hang tight mate! Squeezing out the Gist...
         </div>
         <div class="loader-container">
-          <div class="fist">
-            <div class="palm"></div>
-            <div class="knuckle k1"></div>
-            <div class="knuckle k2"></div>
-            <div class="knuckle k3"></div>
-            <div class="knuckle k4"></div>
-            <div class="thumb"></div>
-          </div>
-          <div class="orange"></div>
-          <div class="juice-drop1"></div>
-          <div class="juice-drop2"></div>
-          <div class="juice-drop3"></div>
-          <div class="glass">
-            <div class="juice-level"></div>
-            <div class="splash"></div>
+            <div class="fist">
+              <div class="palm"></div>
+              <div class="knuckle k1"></div>
+              <div class="knuckle k2"></div>
+              <div class="knuckle k3"></div>
+              <div class="knuckle k4"></div>
+              <div class="thumb"></div>
+            </div>
+            <div class="orange"></div>
+            <div class="juice-drop1"></div>
+            <div class="juice-drop2"></div>
+            <div class="juice-drop3"></div>
+            <div class="glass">
+              <div class="juice-level"></div>
+              <div class="splash"></div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="audioPlayer" style="display: none;"></audio>
+
+    <!-- Include the JavaScript file -->
+    <script src="index.js"></script>
   </body>
 </html>
