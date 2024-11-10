@@ -10,14 +10,18 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
-app.use(
-  express.text({
-    limit: "10mb",
-    type: ["text/html", "text/plain", "application/javascript"],
-  })
-);
+// app.use(
+//   express.text({
+//     limit: "10mb",
+//     type: ["text/html", "text/plain", "application/javascript"],
+//   })
+// );
 
-app.use(express.json());
+app.use(express.json(
+  {
+    limit: "10mb"
+  }
+));
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // This is the default and can be omitted
@@ -65,16 +69,8 @@ The summary should be a concise and detailed, include important and detailed inf
 
 Input website content:`;
 
-const prompt2 = `You are an AI assistant that turns summarys to HTML pages. You will be given a summary of the website and sugested components and icons. Your task is to use the summary and sugested visual components to produce a well-structured HTML page to present a concise digestable summary of the website. The HTML page you produce, can be interactive and adapt depending on the context of the website. Make it for visual learners. Ensure the HTML output is visually appealing and digestible. Style it acordingly. Do not include any placeholder images.
 
-Organize the content in a way that is easy to read and understand (for example, cards in a grid). You can use emojis for icons.
-
-Make sure to include all usful information from the summary (dont just make it a high level summary, actualy include detailes and usful information).
-
-Encapsulate your HTML output exclusively between the <generatedcode> and </generatedcode> tags.
-
-Input summary:`;
-const mainprompt2 = `You are an AI assistant that helps summarize and turn website content into a digestible, accessible format for visual learners. You will be given the content of the website. Your task is to analyze the content of the website, take the content, and produce a concise summary of the website, capped at 300 words. The summary should be suitable for conversion into an audio file that does not exceed 3 minutes when read aloud at a normal speaking pace. Adapt the summery and analysis depending on the context, for example:
+const mainprompt2=`You are an AI assistant that helps summarize and turn website content into a digestible, accessible format for visual learners. You will be given the content of the website. Your task is to analyze the content of the website, take the content, and produce a concise summary of the website, capped at 300 words. The summary should be suitable for conversion into an audio file that does not exceed 3 minutes when read aloud at a normal speaking pace. Adapt the summery and analysis depending on the context, for example:
 
 -If it's about a detailed weather forecast, provide an interpretation of radar data and discuss humidity levels. 
 -If it's about a sports event or a news article, give a concise summary, mention biases if any, and predict the winning chances for teams if it's a sports article. 
@@ -82,31 +78,54 @@ const mainprompt2 = `You are an AI assistant that helps summarize and turn websi
 -If it's a map or a review, summarize the key review points, determine the overall sentiment, suggest nearby places of interest. 
 -If none of the categories fit, read the text and create a theme, then summarize based on that theme and/or perform sentiment analysis.`
 
+var prompt2:any ;
+function buildPrompt2(colorB:any,dys:any,highC:any)
+{
+  prompt2 = `You are an AI assistant that turns summarys to HTML pages. You will be given a summary of the website and sugested components and icons. Your task is to use the summary and sugested visual components to produce a well-structured HTML page to present a concise digestable summary of the website. The HTML page you produce, can be interactive and adapt depending on the context of the website. Make it for visual learners. Ensure the HTML output is visually appealing and digestible. Style it acordingly. Do not include any placeholder images.
+
+Organize the content in a way that is easy to read and understand (for example, cards in a grid). You can use emojis for icons.
+
+Make sure to include all usful information from the summary (dont just make it a high level summary, actualy include detailes and usful information).
+
+Keep the folloing accesabilety variubles in mind when styling the page:
+color blind: ${colorB}
+dislexic: ${dys}
+high contrast: ${highC}
+
+
+Encapsulate your HTML output exclusively between the <generatedcode> and </generatedcode> tags.
+
+Input summary:`;
+  
+return prompt2
+
+}
 
 app.post("/process-html", async (req: any, res: any) => {
   try {
-    const websiteContent = req.body;
-    if (!websiteContent) {
+    const reqs = req.body;
+  
+    if (!reqs['websiteContent']) {
       return res.status(400).json({ error: "Content is required" });
     }
 
     // First API call - Get the summary
     const summaryResponse = await client.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt1 + websiteContent }],
+      messages: [{ role: "user", content: prompt1 + reqs['websiteContent'] }],
     });
 
     const summary = summaryResponse.choices[0].message?.content;
     if (!summary) {
       throw new Error("Failed to generate summary");
     }
-
+    console.log("buildP2",buildPrompt2(reqs['colorB'],reqs['dys'],reqs['highC']))
     // Second API call - Convert summary to HTML
     const htmlResponse = await client.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "user", content: prompt2 + summary }],
+      messages: [{ role: "user", content: buildPrompt2(reqs['colorB'],reqs['dys'],reqs['highC']) + summary }],
     });
-
+``
     const reply = htmlResponse.choices[0].message?.content;
     const parsedHTML = parseHtmlResponse(reply!);
 

@@ -1,5 +1,84 @@
 // chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
 //   .catch((error) => console.error(error));
+let colorB = false;
+let highC = false;
+let dys = false;
+
+// Open (or create if it doesn't exist) the IndexedDB database
+const request = indexedDB.open("AccessibilitySettingsDB", 1);
+
+// Set up the database structure if needed
+request.onupgradeneeded = (event) => {
+  const db = event.target.result;
+  db.createObjectStore("settings", { keyPath: "id" });
+};
+
+// Load settings from IndexedDB into variables
+request.onsuccess = (event) => {
+  const db = event.target.result;
+  const transaction = db.transaction("settings", "readonly");
+  const store = transaction.objectStore("settings");
+
+  store.getAll().onsuccess = (event) => {
+    const settings = event.target.result;
+    
+    settings.forEach((setting) => {
+      if (setting.id === "colorBlind") colorB = setting.enabled;
+      if (setting.id === "highContrast") highC = setting.enabled;
+      if (setting.id === "dyslexicFont") dys = setting.enabled;
+    });
+
+    // Log the loaded variables for verification
+    console.log("Settings loaded:");
+    console.log("colorB:", colorB);
+    console.log("highC:", highC);
+    console.log("dys:", dys);
+  };
+};
+
+function loadSettingsFromDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open("AccessibilitySettingsDB", 1);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      db.createObjectStore("settings", { keyPath: "id" });
+    };
+
+    request.onsuccess = (event) => {
+      const db = event.target.result;
+      const transaction = db.transaction("settings", "readonly");
+      const store = transaction.objectStore("settings");
+
+      const settings = { colorB, highC, dys };
+
+      store.getAll().onsuccess = (event) => {
+        const result = event.target.result;
+
+        result.forEach((setting) => {
+          if (setting.id === "colorBlind") settings.colorB = setting.enabled;
+          if (setting.id === "highContrast") settings.highC = setting.enabled;
+          if (setting.id === "dyslexicFont") settings.dys = setting.enabled;
+        });
+
+        // Update global variables with the latest settings
+        colorB = settings.colorB;
+        highC = settings.highC;
+        dys = settings.dys;
+
+        resolve(settings);
+      };
+
+      store.getAll().onerror = (event) => {
+        reject(event.target.error);
+      };
+    };
+
+    request.onerror = (event) => {
+      reject(event.target.error);
+    };
+  });
+}
 
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Chrome Reading List Extension Installed");
@@ -35,7 +114,12 @@ chrome.runtime.onInstalled.addListener(() => {
     .trim(); // Remove leading/trailing whitespace
   
     // Trim and return only the text content
-    return html.trim();
+    return {
+      websiteContent:html.trim(),
+      colorB,
+  highC,
+  dys
+}
   }
   // Example usage
   
@@ -49,28 +133,6 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.runtime.sendMessage({ content });
   }
   
-  
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.content) {
-      fetch("http://localhost:3000/process-html", {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/html",
-        },
-        body: removeHTMLTagsCSSAndJS(message.content), 
-      })
-        .then((response)=>{return response.text()}).then((response)=>{
-          console.log("response parsed",response)
-          chrome.runtime.sendMessage({ type: 'HTML_FETCHED', data: response });
-        })
-        .catch((error) => {
-          console.error("Error sending content to server:", error);
-          sendResponse({ status: "error", error });
-        });
-  
-      return true;
-    }
-  });
 
 // Listen for messages from the content script
 let windowId;
@@ -104,20 +166,7 @@ chrome.webNavigation.onCompleted.addListener(
   { url: [{ urlMatches: "https://*/*" }] }
 );
 
-function removeHTMLTagsCSSAndJS(html) {
-  // Remove <style> and <script> blocks along with their content
-  html = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
-  html = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
 
-  // Remove any inline JavaScript event handlers (e.g., onclick="...")
-  html = html.replace(/\s*on\w+="[^"]*"/gi, '');
-
-  // Remove all HTML tags
-  html = html.replace(/<[^>]+>/g, '');
-
-  // Trim and return only the text content
-  return html.trim();
-}
 
 function capturePageContent() {
   // Get the HTML content of the page
@@ -130,23 +179,24 @@ function capturePageContent() {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.content) {
-    fetch("http://localhost:3000/process-html", {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/html",
-      },
-      body: removeHTMLTagsCSSAndJS(message.content),
-    })
-      .then((response) => response.text())
-      .then((response) => {
-        console.log("response parsed", response);
-        chrome.runtime.sendMessage({ type: 'HTML_FETCHED', data: response });
+    loadSettingsFromDB().then(() => {
+      fetch("http://localhost:3000/process-html", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(removeHTMLTagsCSSAndJS(message.content)),
       })
-      .catch((error) => {
-        console.error("Error sending content to server:", error);
-        sendResponse({ status: "error", error });
-      });
-
+        .then((response) => response.text())
+        .then((response) => {
+          console.log("response parsed", response);
+          chrome.runtime.sendMessage({ type: 'HTML_FETCHED', data: response });
+        })
+        .catch((error) => {
+          console.error("Error sending content to server:", error);
+          sendResponse({ status: "error", error });
+        });
+    })
     return true;
   }
 });
