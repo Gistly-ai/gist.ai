@@ -390,14 +390,14 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background-color: #ff9933;
+  background-color: #ff9f1c;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
+  transition: transform 0.2s, background-color 0.3s ease;
   z-index: 9999;
 }
 
@@ -407,4 +407,9 @@ body {
 
 .play-btn svg {
   stroke: white;
+}
+
+.play-btn.disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
