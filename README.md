@@ -104,3 +104,10 @@
 ### License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+### Authors
+
+- [Nirman Malaviya](https://github.com/Nirman529)
+- [Harsh Jain](https://github.com/harsh3401)
+- [Abhinav Prakash](https://github.com/abhinavprkash)
+- [Daniel Trachtenberg](https://github.com/daniel-trachtenberg)
