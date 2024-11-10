@@ -18,6 +18,23 @@ chrome.webNavigation.onCompleted.addListener(
   { url: [{ urlMatches: "https://*/*" }] }
 );
 
+function removeHTMLTagsCSSAndJS(html) {
+  // Remove <style> and <script> blocks along with their content
+  html = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+  html = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+
+  // Remove any inline JavaScript event handlers (e.g., onclick="...")
+  html = html.replace(/\s*on\w+="[^"]*"/gi, '');
+
+  // Remove all HTML tags
+  html = html.replace(/<[^>]+>/g, '');
+
+  // Trim and return only the text content
+  return html.trim();
+}
+// Example usage
+
+
 function capturePageContent() {
   // Get the HTML content of the page
   const content = document.documentElement.outerHTML;
@@ -29,12 +46,12 @@ function capturePageContent() {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.content) {
-    fetch("http://localhost:3000/fetch-content", {
+    fetch("http://localhost:3000/process-html", {
       method: "POST",
       headers: {
         "Content-Type": "text/html",
       },
-      body: message.content, 
+      body: removeHTMLTagsCSSAndJS(message.content), 
     })
       .then((response) => response.json())
       .then((data) => {
