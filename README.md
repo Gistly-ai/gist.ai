@@ -1,6 +1,6 @@
 ## Gist.ai
 
-<img src="https://i.postimg.cc/cL3sLF7p/logo-Photoroom.png" width="300" alt="Logo">
+![Banner](https://i.postimg.cc/J4N8ws18/gist-ai-banner.jpg)
 
 **Gist.ai** is a Chrome extension that simplifies web content, summarizes it in real-time, and even generates a short podcast-style audio summary for hands-free browsing. Designed for accessibility and ease of understanding, Gist.ai is built with React, TailwindCSS, Node.js, and Express, integrating AI and contextual APIs to bring concise insights and summaries from complex information.
 
