@@ -1,3 +1,58 @@
-## gist.ai
+## Gist.ai
 
-![Banner](https://i.postimg.cc/508R8cjT/gist-ai-banner.jpg)
+<img src="https://i.postimg.cc/cL3sLF7p/logo-Photoroom.png" width="300" alt="Logo">
+
+**Gist.ai** is a Chrome extension that simplifies web content, summarizes it in real-time, and even generates a short podcast-style audio summary for hands-free browsing. Designed for accessibility and ease of understanding, Gist.ai is built with React, TailwindCSS, Node.js, and Express, integrating AI and contextual APIs to bring concise insights and summaries from complex information.
+
+### Table of Contents
+
+- [Installation](#installation)
+- [Features](#features)
+- [License](#license)
+
+---
+
+### Installation
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone https://github.com/Gistly-ai/gist.ai.git
+   ```
+
+2. **Open the Project:**
+   Navigate into the cloned project directory.
+
+3. **Set Up the Backend:**
+
+   ```bash
+   cd backend
+   npm install
+   npm start
+   ```
+
+   This will install the necessary backend dependencies and start the backend server.
+
+4. **Set Up the Frontend as a Chrome Extension:**
+
+   - Open Google Chrome and go to `chrome://extensions`.
+   - Enable **Developer mode** (top right corner).
+   - Click on **Load unpacked** and select the `frontend` folder within the project directory.
+   - You should see Gist.ai listed as an enabled extension.
+
+5. **Launch the Extension:**
+   - Click the Gist.ai icon in the Chrome extensions toolbar to start using the extension.
+
+---
+
+### Features
+
+- **Real-Time Summarization:** Gist.ai simplifies and summarizes web content as you browse.
+- **Audio Podcast Summary:** Generates a 1-2 minute audio summary of the webpage, providing a hands-free, podcast-like experience for on-the-go users.
+- **Accessible Content:** Makes complex information easier to understand for all users.
+- **Personalized Settings:** Users can customize the extension’s functionality and appearance.
+- **Seamless API Integrations:** Utilizes advanced AI and contextual data APIs for enriched summaries.
+
+### License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
