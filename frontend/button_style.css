@@ -1,0 +1,17 @@
+#hoverButton {
+    position: fixed;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  
+  #hoverButton:hover {
+    background-color: #005f73;
+  }
+  
