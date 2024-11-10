@@ -1,17 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Chrome Reading List",
+  "name": "gist.ai",
   "version": "1.0",
   "description": "A Chrome extension to keep a reading list.",
   "action": {
     "default_popup": "index.html",
     "default_icon": "icon.png"
   },
-  "permissions": [
-    "storage",
-    "activeTab",
-    "scripting"
-  ],
+  "permissions": ["storage", "activeTab", "scripting"],
   "background": {
     "service_worker": "background.js"
   },
