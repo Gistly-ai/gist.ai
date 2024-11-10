@@ -1,82 +1,383 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  color: #1f1f1f;
-  background-color: #f2f2f2;
-  font-size: 16px;
-  padding: 8px;
+  background: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
 }
 
-input,
-button,
-textarea,
-select {
-  font-family: inherit;
-  font-size: inherit;
+/* Loader Container */
+.loader-container {
+  width: 120px;
+  height: 240px;
+  position: relative;
+  margin: 50px auto;
 }
 
-button {
-  background: #333;
-  color: white;
-  border-radius: 8px;
-  border: none;
-  min-width: 100px;
-  padding: 8px;
-  margin: 16px 0;
-  cursor: pointer;
+/* Fist styling */
+.fist {
+  position: absolute;
+  top: -30px;
+  left: -15px;
+  width: 150px;
+  height: 150px;
+  animation: fist-squeeze 1.5s infinite;
 }
 
-button.primary {
-  background: #333;
-  color: white;
+.palm {
+  position: absolute;
+  width: 60px;
+  height: 70px;
+  background: #e6b8a2;
+  border: 4px solid #c69b8b;
+  border-radius: 30px 30px 20px 20px;
+  left: 35px;
+  top: 20px;
+  transform: rotate(-10deg);
+  box-shadow: -4px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
-button.secondary {
-  background: #ccc;
-  color: black;
+.knuckle {
+  position: absolute;
+  background: #e6b8a2;
+  border: 4px solid #c69b8b;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  animation: knuckle-flex 1.5s infinite;
 }
 
-button[disabled] {
-  background: #ddd;
-  color: #aaa;
+.k1 {
+  left: 40px;
+  top: 15px;
+}
+.k2 {
+  left: 55px;
+  top: 12px;
+}
+.k3 {
+  left: 70px;
+  top: 15px;
+}
+.k4 {
+  left: 85px;
+  top: 20px;
 }
 
-input[type='range'] {
-  margin-top: 16px;
-  accent-color: black;
+.thumb {
+  position: absolute;
+  width: 25px;
+  height: 45px;
+  background: #e6b8a2;
+  border: 4px solid #c69b8b;
+  left: 20px;
+  top: 35px;
+  transform: rotate(-45deg);
+  border-radius: 15px 15px 10px 20px;
+  animation: thumb-squeeze 1.5s infinite;
 }
 
-textarea {
-  --padding: 32px;
-  width: calc(100% - var(--padding));
-  max-width: calc(100% - var(--padding));
+/* Orange/Citrus styling */
+.orange {
+  width: 75px;
+  height: 75px;
+  background: linear-gradient(145deg, #ffa500, #ff8c00);
+  border: 3px solid #ff7b00;
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  left: 22px;
+  animation: orange-squeeze 1.5s infinite;
+  box-shadow: -4px 4px 0 rgba(0, 0, 0, 0.2),
+    inset 5px -5px 15px rgba(255, 165, 0, 0.5),
+    inset -5px 5px 15px rgba(255, 140, 0, 0.5);
+  overflow: hidden;
 }
 
-.text,
-textarea {
-  background-color: white;
-  padding: 16px;
-  border-radius: 16px;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
-  outline: none;
+/* Glass styling */
+.glass {
+  width: 70px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 4px solid #ddd;
+  border-radius: 5px 5px 25px 25px;
+  position: absolute;
+  bottom: 0;
+  left: 25px;
+  overflow: hidden;
+  box-shadow: -4px 4px 0 rgba(0, 0, 0, 0.1);
 }
 
-.blink {
-  animation: 1s ease-in-out 1s infinite reverse both running blink;
+/* Juice drops */
+.juice-drop1,
+.juice-drop2,
+.juice-drop3 {
+  width: 10px;
+  height: 10px;
+  background: #ffa500;
+  position: absolute;
+  left: 55px;
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: -2px 2px 0 rgba(0, 0, 0, 0.2);
 }
 
-@keyframes blink {
-  25% {
-    opacity: 0.5;
+.juice-drop1 {
+  top: 90px;
+  animation: drop1 1.5s infinite;
+}
+.juice-drop2 {
+  top: 90px;
+  animation: drop2 1.5s infinite;
+}
+.juice-drop3 {
+  top: 90px;
+  animation: drop3 1.5s infinite;
+}
+
+.juice-level {
+  width: 100%;
+  height: 50%;
+  background: #ffa500;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  animation: fill 1.5s infinite;
+}
+
+/* Splashing effect */
+.splash {
+  position: absolute;
+  width: 100%;
+  height: 10px;
+  bottom: 50%;
+  left: 0;
+  animation: splash 1.5s infinite;
+}
+
+.splash::before,
+.splash::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #ffa500;
+  border-radius: 50%;
+  animation: splash-dots 1.5s infinite;
+}
+
+.splash::before {
+  left: 20%;
+}
+.splash::after {
+  right: 20%;
+}
+
+/* Shine effect on juice surface */
+.juice-level::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  animation: shine 2s infinite linear;
+}
+
+/* Animations */
+@keyframes fist-squeeze {
+  0%,
+  100% {
+    transform: scale(1) rotate(-10deg);
   }
-  50% {
+  30% {
+    transform: scale(0.97, 1.03) rotate(-12deg) translateY(3px);
+  }
+  40% {
+    transform: scale(0.97, 1.03) rotate(-12deg) translateY(3px);
+  }
+}
+
+@keyframes thumb-squeeze {
+  0%,
+  100% {
+    transform: rotate(-45deg);
+  }
+  30%,
+  40% {
+    transform: rotate(-50deg) translateX(-3px);
+  }
+}
+
+@keyframes knuckle-flex {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  30%,
+  40% {
+    transform: scale(1.1, 0.9);
+  }
+}
+
+@keyframes orange-squeeze {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  30%,
+  40% {
+    transform: scale(0.92, 1.08);
+  }
+}
+
+@keyframes pattern-squeeze {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  30%,
+  40% {
+    transform: scale(1.1, 0.9) rotate(2deg);
+  }
+}
+
+@keyframes drop1 {
+  0%,
+  35% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(0) scale(1.2, 0.8);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(80px);
+  }
+  71%,
+  100% {
     opacity: 0;
   }
-  75% {
-    opacity: 0.5;
+}
+
+@keyframes drop2 {
+  0%,
+  45% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0) scale(1.2, 0.8);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(80px);
+  }
+  81%,
+  100% {
+    opacity: 0;
   }
 }
 
-[hidden] {
-  display: none;
+@keyframes drop3 {
+  0%,
+  55% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1.2, 0.8);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(80px);
+  }
+  91%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fill {
+  0% {
+    height: 50%;
+  }
+  90%,
+  100% {
+    height: 60%;
+  }
+}
+
+@keyframes splash {
+  0%,
+  30% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  60% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes splash-dots {
+  0%,
+  30% {
+    opacity: 0;
+    transform: scale(0) translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1) translateY(-10px);
+  }
+  60% {
+    opacity: 0;
+    transform: scale(0.5) translateY(-20px);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.loading-text {
+  font-family: "Comic Neue", cursive; /* Using Comic Neue for a fun, friendly feel */
+  font-size: 24px; /* Increased size */
+  font-weight: 700; /* Bold weight */
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  animation: bounce 2s infinite ease-in-out; /* Added subtle animation */
+}
+
+/* Add a subtle bounce animation */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
