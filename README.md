@@ -8,6 +8,7 @@
 
 - [Installation](#installation)
 - [Features](#features)
+- [Configuration](#configuration)
 - [License](#license)
 
 ---
@@ -20,13 +21,38 @@
    git clone https://github.com/Gistly-ai/gist.ai.git
    ```
 
-2. **Open the Project:**
-   Navigate into the cloned project directory.
+2. **Configure API Keys and Environment:**
+
+   ```bash
+   cd backend
+   mkdir secrets
+   touch .env
+   ```
+
+   #### OpenAI Configuration:
+
+   - Create an account at [OpenAI Platform](https://platform.openai.com)
+   - Generate an API key from your dashboard
+   - Add the following to your `.env` file:
+     ```
+     OPENAI_API_KEY=your_api_key_here
+     PORT=3000
+     ```
+
+   #### Google Cloud Configuration:
+
+   - Go to [Google Cloud Console](https://console.cloud.google.com)
+   - Create a new project or select an existing one
+   - Enable the Text-to-Speech API for your project
+   - Navigate to IAM & Admin > Service Accounts
+   - Create a new service account
+   - Create a new key (JSON type) for this service account
+   - Download the JSON file and place it in the `backend/secrets` folder
+   - Rename it to `google-credentials.json`
 
 3. **Set Up the Backend:**
 
    ```bash
-   cd backend
    npm install
    npm start
    ```
@@ -52,6 +78,28 @@
 - **Accessible Content:** Makes complex information easier to understand for all users.
 - **Personalized Settings:** Users can customize the extension’s functionality and appearance.
 - **Seamless API Integrations:** Utilizes advanced AI and contextual data APIs for enriched summaries.
+
+### Configuration
+
+- **OpenAI Configuration:**
+
+  - Create an account at [OpenAI Platform](https://platform.openai.com)
+  - Generate an API key from your dashboard
+  - Add the following to your `.env` file:
+    ```
+    OPENAI_API_KEY=your_api_key_here
+    PORT=3000
+    ```
+
+- **Google Cloud Configuration:**
+  - Go to [Google Cloud Console](https://console.cloud.google.com)
+  - Create a new project or select an existing one
+  - Enable the Text-to-Speech API for your project
+  - Navigate to IAM & Admin > Service Accounts
+  - Create a new service account
+  - Create a new key (JSON type) for this service account
+  - Download the JSON file and place it in the `backend/secrets` folder
+  - Rename it to `google-credentials.json`
 
 ### License
 
